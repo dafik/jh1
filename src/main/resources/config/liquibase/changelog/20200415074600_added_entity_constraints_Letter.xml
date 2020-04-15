@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity Letter.
+    -->
+    <changeSet id="20200415074600-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="sender_id"
+                                 baseTableName="letter"
+                                 constraintName="fk_letter_sender_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="actor"/>
+
+        <addForeignKeyConstraint baseColumnNames="receipient_id"
+                                 baseTableName="letter"
+                                 constraintName="fk_letter_receipient_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="actor"/>
+
+        <addForeignKeyConstraint baseColumnNames="letter_group_id"
+                                 baseTableName="letter"
+                                 constraintName="fk_letter_letter_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="letter_group"/>
+
+    </changeSet>
+</databaseChangeLog>

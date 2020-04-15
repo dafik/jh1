@@ -1,11 +1,12 @@
 package pl.envelo.erds.ua.security.oauth2;
 
-import java.util.Collection;
+import pl.envelo.erds.ua.security.SecurityUtils;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
-import pl.envelo.erds.ua.security.SecurityUtils;
+
+import java.util.Collection;
 
 @Component
 public class JwtGrantedAuthorityConverter implements Converter<Jwt, Collection<GrantedAuthority>> {

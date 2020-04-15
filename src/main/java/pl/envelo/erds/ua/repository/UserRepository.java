@@ -1,21 +1,25 @@
 package pl.envelo.erds.ua.repository;
 
-import java.time.Instant;
-import java.util.List;
-import java.util.Optional;
+import pl.envelo.erds.ua.domain.User;
+
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
+
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pl.envelo.erds.ua.domain.User;
+
+import java.util.List;
+import java.util.Optional;
+import java.time.Instant;
 
 /**
  * Spring Data JPA repository for the {@link User} entity.
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, String> {
+
     String USERS_BY_LOGIN_CACHE = "usersByLogin";
 
     String USERS_BY_EMAIL_CACHE = "usersByEmail";
@@ -23,6 +27,8 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findOneByEmailIgnoreCase(String email);
 
     Optional<User> findOneByLogin(String login);
+
+
 
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesById(Long id);

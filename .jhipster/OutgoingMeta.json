@@ -1,0 +1,40 @@
+{
+    "name": "OutgoingMeta",
+    "fields": [
+        {
+            "fieldName": "sendAt",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "expireAt",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "lastEditAt",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "letterGroup",
+            "otherEntityRelationshipName": "outgoingMeta",
+            "relationshipName": "letterGroup",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200415074800",
+    "entityTableName": "outgoing_meta",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "useragent",
+    "applications": [
+        "useragent"
+    ],
+    "microserviceName": "useragent"
+}

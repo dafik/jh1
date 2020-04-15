@@ -1,16 +1,13 @@
 package pl.envelo.erds.ua.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.hamcrest.Matchers.hasItems;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.time.Instant;
-import java.util.*;
-import java.util.function.Consumer;
-import javax.persistence.EntityManager;
+import pl.envelo.erds.ua.UseragentApp;
+import pl.envelo.erds.ua.config.TestSecurityConfiguration;
+import pl.envelo.erds.ua.domain.Authority;
+import pl.envelo.erds.ua.domain.User;
+import pl.envelo.erds.ua.repository.UserRepository;
+import pl.envelo.erds.ua.security.AuthoritiesConstants;
+import pl.envelo.erds.ua.service.dto.UserDTO;
+import pl.envelo.erds.ua.service.mapper.UserMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -22,22 +19,27 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import pl.envelo.erds.ua.UseragentApp;
-import pl.envelo.erds.ua.config.TestSecurityConfiguration;
-import pl.envelo.erds.ua.domain.Authority;
-import pl.envelo.erds.ua.domain.User;
-import pl.envelo.erds.ua.repository.UserRepository;
-import pl.envelo.erds.ua.security.AuthoritiesConstants;
-import pl.envelo.erds.ua.service.dto.UserDTO;
-import pl.envelo.erds.ua.service.mapper.UserMapper;
+
+import javax.persistence.EntityManager;
+import java.time.Instant;
+import java.util.*;
+import java.util.function.Consumer;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItems;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link UserResource} REST controller.
  */
 @AutoConfigureMockMvc
 @WithMockUser(authorities = AuthoritiesConstants.ADMIN)
-@SpringBootTest(classes = { UseragentApp.class, TestSecurityConfiguration.class })
+@SpringBootTest(classes = {UseragentApp.class, TestSecurityConfiguration.class})
 public class UserResourceIT {
+
     private static final String DEFAULT_LOGIN = "johndoe";
 
     private static final String DEFAULT_ID = "id1";
@@ -108,8 +110,8 @@ public class UserResourceIT {
         userRepository.saveAndFlush(user);
 
         // Get all the users
-        restUserMockMvc
-            .perform(get("/api/users?sort=id,desc").accept(MediaType.APPLICATION_JSON))
+        restUserMockMvc.perform(get("/api/users?sort=id,desc")
+            .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].login").value(hasItem(DEFAULT_LOGIN)))
@@ -129,8 +131,7 @@ public class UserResourceIT {
         assertThat(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE).get(user.getLogin())).isNull();
 
         // Get the user
-        restUserMockMvc
-            .perform(get("/api/users/{login}", user.getLogin()))
+        restUserMockMvc.perform(get("/api/users/{login}", user.getLogin()))
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.login").value(user.getLogin()))
@@ -146,7 +147,8 @@ public class UserResourceIT {
     @Test
     @Transactional
     public void getNonExistingUser() throws Exception {
-        restUserMockMvc.perform(get("/api/users/unknown")).andExpect(status().isNotFound());
+        restUserMockMvc.perform(get("/api/users/unknown"))
+            .andExpect(status().isNotFound());
     }
 
     @Test

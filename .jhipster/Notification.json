@@ -1,0 +1,69 @@
+{
+    "name": "Notification",
+    "fields": [
+        {
+            "fieldName": "ean",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "erdsId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "processId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "subject",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "state",
+            "fieldType": "NotificationState",
+            "fieldValues": "NEW,ACCEPTED,REJECTED"
+        },
+        {
+            "fieldName": "senderId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "senderLabel",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "sendAt",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "decisionAt",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "expireAt",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "box",
+            "otherEntityRelationshipName": "notification",
+            "relationshipName": "box",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200415075000",
+    "entityTableName": "notification",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "useragent",
+    "applications": [
+        "useragent"
+    ],
+    "microserviceName": "useragent"
+}

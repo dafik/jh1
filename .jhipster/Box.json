@@ -1,0 +1,79 @@
+{
+    "name": "Box",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "namespace",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "label",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "boxType",
+            "fieldType": "BoxType",
+            "fieldValues": "NATURAL,LEGAL"
+        },
+        {
+            "fieldName": "isActive",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "rulesAcceptanceDate",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "evidence",
+            "otherEntityRelationshipName": "box",
+            "relationshipName": "evidence"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "notification",
+            "otherEntityRelationshipName": "box",
+            "relationshipName": "notification"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "letterGroup",
+            "otherEntityRelationshipName": "box",
+            "relationshipName": "letterGroup"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "userAccount",
+            "otherEntityRelationshipName": "box",
+            "relationshipName": "rulesAcceptanceUser",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "userAccount",
+            "otherEntityRelationshipName": "box",
+            "relationshipName": "userAccount",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200415075300",
+    "entityTableName": "box",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "useragent",
+    "applications": [
+        "useragent"
+    ],
+    "microserviceName": "useragent"
+}

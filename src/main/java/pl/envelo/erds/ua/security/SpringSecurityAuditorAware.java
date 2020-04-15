@@ -1,9 +1,11 @@
 package pl.envelo.erds.ua.security;
 
+import pl.envelo.erds.ua.config.Constants;
+
 import java.util.Optional;
+
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Component;
-import pl.envelo.erds.ua.config.Constants;
 
 /**
  * Implementation of {@link AuditorAware} based on Spring Security.

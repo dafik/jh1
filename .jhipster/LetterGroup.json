@@ -1,0 +1,88 @@
+{
+    "name": "LetterGroup",
+    "fields": [
+        {
+            "fieldName": "msgId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "state",
+            "fieldType": "LetterState",
+            "fieldValues": "RECEIVED,TRASH_RECEIVED,DRAFT,TRASH_DRAFT,PENDING,TRASH_PENDING,PAID,TRASH_PAID,SENT,TRASH_SENT"
+        },
+        {
+            "fieldName": "subject",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "createdAt",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "replayTo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "inReplayTo",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "incomingMeta",
+            "otherEntityRelationshipName": "letterGroup",
+            "relationshipName": "incomingMeta",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "outgoingMeta",
+            "otherEntityRelationshipName": "letterGroup",
+            "relationshipName": "outgoingMeta",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "attachment",
+            "otherEntityRelationshipName": "letterGroup",
+            "relationshipName": "attachment"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "letter",
+            "otherEntityRelationshipName": "letterGroup",
+            "relationshipName": "letter"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "box",
+            "otherEntityRelationshipName": "letterGroup",
+            "relationshipName": "box",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "thread",
+            "otherEntityRelationshipName": "letterGroup",
+            "relationshipName": "thread",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200415074400",
+    "entityTableName": "letter_group",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "useragent",
+    "applications": [
+        "useragent"
+    ],
+    "microserviceName": "useragent"
+}
