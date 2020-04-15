@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity LetterGroup.
+    -->
+    <changeSet id="20200415074400-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="incoming_meta_id"
+                                 baseTableName="letter_group"
+                                 constraintName="fk_letter_group_incoming_meta_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="incoming_meta"/>
+
+        <addForeignKeyConstraint baseColumnNames="outgoing_meta_id"
+                                 baseTableName="letter_group"
+                                 constraintName="fk_letter_group_outgoing_meta_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="outgoing_meta"/>
+
+        <addForeignKeyConstraint baseColumnNames="box_id"
+                                 baseTableName="letter_group"
+                                 constraintName="fk_letter_group_box_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="box"/>
+
+        <addForeignKeyConstraint baseColumnNames="thread_id"
+                                 baseTableName="letter_group"
+                                 constraintName="fk_letter_group_thread_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="thread"/>
+
+    </changeSet>
+</databaseChangeLog>

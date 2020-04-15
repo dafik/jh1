@@ -1,0 +1,32 @@
+{
+    "name": "Actor",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "schema",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "label",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20200415075200",
+    "entityTableName": "actor",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "useragent",
+    "applications": [
+        "useragent"
+    ],
+    "microserviceName": "useragent"
+}

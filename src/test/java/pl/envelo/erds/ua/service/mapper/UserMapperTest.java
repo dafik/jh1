@@ -1,20 +1,22 @@
 package pl.envelo.erds.ua.service.mapper;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import pl.envelo.erds.ua.domain.User;
+import pl.envelo.erds.ua.service.dto.UserDTO;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import pl.envelo.erds.ua.domain.User;
-import pl.envelo.erds.ua.service.dto.UserDTO;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Unit tests for {@link UserMapper}.
  */
 public class UserMapperTest {
+
     private static final String DEFAULT_LOGIN = "johndoe";
     private static final String DEFAULT_ID = "id1";
 

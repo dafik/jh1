@@ -1,8 +1,13 @@
 package pl.envelo.erds.ua.service;
 
-import java.time.Instant;
-import java.util.*;
-import java.util.stream.Collectors;
+import pl.envelo.erds.ua.config.Constants;
+import pl.envelo.erds.ua.domain.Authority;
+import pl.envelo.erds.ua.domain.User;
+import pl.envelo.erds.ua.repository.AuthorityRepository;
+import pl.envelo.erds.ua.repository.UserRepository;
+import pl.envelo.erds.ua.security.SecurityUtils;
+import pl.envelo.erds.ua.service.dto.UserDTO;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -14,13 +19,10 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.envelo.erds.ua.config.Constants;
-import pl.envelo.erds.ua.domain.Authority;
-import pl.envelo.erds.ua.domain.User;
-import pl.envelo.erds.ua.repository.AuthorityRepository;
-import pl.envelo.erds.ua.repository.UserRepository;
-import pl.envelo.erds.ua.security.SecurityUtils;
-import pl.envelo.erds.ua.service.dto.UserDTO;
+
+import java.time.Instant;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -28,6 +30,7 @@ import pl.envelo.erds.ua.service.dto.UserDTO;
 @Service
 @Transactional
 public class UserService {
+
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
@@ -52,22 +55,19 @@ public class UserService {
      * @param imageUrl  image URL of user.
      */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
-        SecurityUtils
-            .getCurrentUserLogin()
+        SecurityUtils.getCurrentUserLogin()
             .flatMap(userRepository::findOneByLogin)
-            .ifPresent(
-                user -> {
-                    user.setFirstName(firstName);
-                    user.setLastName(lastName);
-                    if (email != null) {
-                        user.setEmail(email.toLowerCase());
-                    }
-                    user.setLangKey(langKey);
-                    user.setImageUrl(imageUrl);
-                    this.clearUserCaches(user);
-                    log.debug("Changed Information for User: {}", user);
+            .ifPresent(user -> {
+                user.setFirstName(firstName);
+                user.setLastName(lastName);
+                if (email != null) {
+                    user.setEmail(email.toLowerCase());
                 }
-            );
+                user.setLangKey(langKey);
+                user.setImageUrl(imageUrl);
+                this.clearUserCaches(user);
+                log.debug("Changed Information for User: {}", user);
+            });
     }
 
     /**
@@ -77,49 +77,41 @@ public class UserService {
      * @return updated user.
      */
     public Optional<UserDTO> updateUser(UserDTO userDTO) {
-        return Optional
-            .of(userRepository.findById(userDTO.getId()))
+        return Optional.of(userRepository
+            .findById(userDTO.getId()))
             .filter(Optional::isPresent)
             .map(Optional::get)
-            .map(
-                user -> {
-                    this.clearUserCaches(user);
-                    user.setLogin(userDTO.getLogin().toLowerCase());
-                    user.setFirstName(userDTO.getFirstName());
-                    user.setLastName(userDTO.getLastName());
-                    if (userDTO.getEmail() != null) {
-                        user.setEmail(userDTO.getEmail().toLowerCase());
-                    }
-                    user.setImageUrl(userDTO.getImageUrl());
-                    user.setActivated(userDTO.isActivated());
-                    user.setLangKey(userDTO.getLangKey());
-                    Set<Authority> managedAuthorities = user.getAuthorities();
-                    managedAuthorities.clear();
-                    userDTO
-                        .getAuthorities()
-                        .stream()
-                        .map(authorityRepository::findById)
-                        .filter(Optional::isPresent)
-                        .map(Optional::get)
-                        .forEach(managedAuthorities::add);
-                    this.clearUserCaches(user);
-                    log.debug("Changed Information for User: {}", user);
-                    return user;
+            .map(user -> {
+                this.clearUserCaches(user);
+                user.setLogin(userDTO.getLogin().toLowerCase());
+                user.setFirstName(userDTO.getFirstName());
+                user.setLastName(userDTO.getLastName());
+                if (userDTO.getEmail() != null) {
+                    user.setEmail(userDTO.getEmail().toLowerCase());
                 }
-            )
+                user.setImageUrl(userDTO.getImageUrl());
+                user.setActivated(userDTO.isActivated());
+                user.setLangKey(userDTO.getLangKey());
+                Set<Authority> managedAuthorities = user.getAuthorities();
+                managedAuthorities.clear();
+                userDTO.getAuthorities().stream()
+                    .map(authorityRepository::findById)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .forEach(managedAuthorities::add);
+                this.clearUserCaches(user);
+                log.debug("Changed Information for User: {}", user);
+                return user;
+            })
             .map(UserDTO::new);
     }
 
     public void deleteUser(String login) {
-        userRepository
-            .findOneByLogin(login)
-            .ifPresent(
-                user -> {
-                    userRepository.delete(user);
-                    this.clearUserCaches(user);
-                    log.debug("Deleted User: {}", user);
-                }
-            );
+        userRepository.findOneByLogin(login).ifPresent(user -> {
+            userRepository.delete(user);
+            this.clearUserCaches(user);
+            log.debug("Deleted User: {}", user);
+        });
     }
 
     @Transactional(readOnly = true)
@@ -153,7 +145,8 @@ public class UserService {
     private User syncUserWithIdP(Map<String, Object> details, User user) {
         // save authorities in to sync user roles/groups between IdP and JHipster's local database
         Collection<String> dbAuthorities = getAuthorities();
-        Collection<String> userAuthorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
+        Collection<String> userAuthorities =
+            user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toList());
         for (String authority : userAuthorities) {
             if (!dbAuthorities.contains(authority)) {
                 log.debug("Saving authority '{}' in local database", authority);
@@ -171,12 +164,14 @@ public class UserService {
                 Instant idpModifiedDate = (Instant) details.get("updated_at");
                 if (idpModifiedDate.isAfter(dbModifiedDate)) {
                     log.debug("Updating user '{}' in local database", user.getLogin());
-                    updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
+                    updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
+                        user.getLangKey(), user.getImageUrl());
                 }
                 // no last updated info, blindly update
             } else {
                 log.debug("Updating user '{}' in local database", user.getLogin());
-                updateUser(user.getFirstName(), user.getLastName(), user.getEmail(), user.getLangKey(), user.getImageUrl());
+                updateUser(user.getFirstName(), user.getLastName(), user.getEmail(),
+                    user.getLangKey(), user.getImageUrl());
             }
         } else {
             log.debug("Saving user '{}' in local database", user.getLogin());
@@ -203,20 +198,14 @@ public class UserService {
             throw new IllegalArgumentException("AuthenticationToken is not OAuth2 or JWT!");
         }
         User user = getUser(attributes);
-        user.setAuthorities(
-            authToken
-                .getAuthorities()
-                .stream()
-                .map(GrantedAuthority::getAuthority)
-                .map(
-                    authority -> {
-                        Authority auth = new Authority();
-                        auth.setName(authority);
-                        return auth;
-                    }
-                )
-                .collect(Collectors.toSet())
-        );
+        user.setAuthorities(authToken.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority)
+            .map(authority -> {
+                Authority auth = new Authority();
+                auth.setName(authority);
+                return auth;
+            })
+            .collect(Collectors.toSet()));
         return new UserDTO(syncUserWithIdP(attributes, user));
     }
 

@@ -1,14 +1,11 @@
 package pl.envelo.erds.ua.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static pl.envelo.erds.ua.repository.CustomAuditEventRepository.EVENT_DATA_COLUMN_MAX_LENGTH;
+import pl.envelo.erds.ua.UseragentApp;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpSession;
+import pl.envelo.erds.ua.config.Constants;
+import pl.envelo.erds.ua.config.TestSecurityConfiguration;
+import pl.envelo.erds.ua.config.audit.AuditEventConverter;
+import pl.envelo.erds.ua.domain.PersistentAuditEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,18 +15,24 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.transaction.annotation.Transactional;
-import pl.envelo.erds.ua.UseragentApp;
-import pl.envelo.erds.ua.config.Constants;
-import pl.envelo.erds.ua.config.TestSecurityConfiguration;
-import pl.envelo.erds.ua.config.audit.AuditEventConverter;
-import pl.envelo.erds.ua.domain.PersistentAuditEvent;
+
+import javax.servlet.http.HttpSession;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static pl.envelo.erds.ua.repository.CustomAuditEventRepository.EVENT_DATA_COLUMN_MAX_LENGTH;
 
 /**
  * Integration tests for {@link CustomAuditEventRepository}.
  */
-@SpringBootTest(classes = { UseragentApp.class, TestSecurityConfiguration.class })
+@SpringBootTest(classes = {UseragentApp.class, TestSecurityConfiguration.class})
 @Transactional
 public class CustomAuditEventRepositoryIT {
+
     @Autowired
     private PersistenceAuditEventRepository persistenceAuditEventRepository;
 
@@ -152,4 +155,5 @@ public class CustomAuditEventRepositoryIT {
         List<PersistentAuditEvent> persistentAuditEvents = persistenceAuditEventRepository.findAll();
         assertThat(persistentAuditEvents).hasSize(0);
     }
+
 }

@@ -1,11 +1,13 @@
 package pl.envelo.erds.ua.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import pl.envelo.erds.ua.UseragentApp;
+import pl.envelo.erds.ua.config.Constants;
+import pl.envelo.erds.ua.config.TestSecurityConfiguration;
+import pl.envelo.erds.ua.domain.User;
+import pl.envelo.erds.ua.repository.UserRepository;
+import pl.envelo.erds.ua.security.AuthoritiesConstants;
+import pl.envelo.erds.ua.service.dto.UserDTO;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,20 +21,20 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.transaction.annotation.Transactional;
-import pl.envelo.erds.ua.UseragentApp;
-import pl.envelo.erds.ua.config.Constants;
-import pl.envelo.erds.ua.config.TestSecurityConfiguration;
-import pl.envelo.erds.ua.domain.User;
-import pl.envelo.erds.ua.repository.UserRepository;
-import pl.envelo.erds.ua.security.AuthoritiesConstants;
-import pl.envelo.erds.ua.service.dto.UserDTO;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Integration tests for {@link UserService}.
  */
-@SpringBootTest(classes = { UseragentApp.class, TestSecurityConfiguration.class })
+@SpringBootTest(classes = {UseragentApp.class, TestSecurityConfiguration.class})
 @Transactional
 public class UserServiceIT {
+
     private static final String DEFAULT_LOGIN = "johndoe";
 
     private static final String DEFAULT_EMAIL = "johndoe@localhost";
@@ -84,7 +86,9 @@ public class UserServiceIT {
         }
         final PageRequest pageable = PageRequest.of(0, (int) userRepository.count());
         final Page<UserDTO> allManagedUsers = userService.getAllManagedUsers(pageable);
-        assertThat(allManagedUsers.getContent().stream().noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin()))).isTrue();
+        assertThat(allManagedUsers.getContent().stream()
+            .noneMatch(user -> Constants.ANONYMOUS_USER.equals(user.getLogin())))
+            .isTrue();
     }
 
     @Test
@@ -161,11 +165,7 @@ public class UserServiceIT {
 
     private OAuth2AuthenticationToken createMockOAuth2AuthenticationToken(Map<String, Object> userDetails) {
         Collection<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.ANONYMOUS));
-        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-            Constants.ANONYMOUS_USER,
-            Constants.ANONYMOUS_USER,
-            authorities
-        );
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(Constants.ANONYMOUS_USER, Constants.ANONYMOUS_USER, authorities);
         usernamePasswordAuthenticationToken.setDetails(userDetails);
         OAuth2User user = new DefaultOAuth2User(authorities, userDetails, "sub");
 

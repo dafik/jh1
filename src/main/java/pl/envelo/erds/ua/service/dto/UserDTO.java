@@ -1,17 +1,20 @@
 package pl.envelo.erds.ua.service.dto;
 
+import pl.envelo.erds.ua.config.Constants;
+
+import pl.envelo.erds.ua.domain.Authority;
+import pl.envelo.erds.ua.domain.User;
+
+import javax.validation.constraints.*;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
-import javax.validation.constraints.*;
-import pl.envelo.erds.ua.config.Constants;
-import pl.envelo.erds.ua.domain.Authority;
-import pl.envelo.erds.ua.domain.User;
 
 /**
  * A DTO representing a user, with his authorities.
  */
 public class UserDTO {
+
     private String id;
 
     @NotBlank
@@ -64,7 +67,9 @@ public class UserDTO {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
-        this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
+        this.authorities = user.getAuthorities().stream()
+            .map(Authority::getName)
+            .collect(Collectors.toSet());
     }
 
     public String getId() {
@@ -173,40 +178,19 @@ public class UserDTO {
 
     @Override
     public String toString() {
-        return (
-            "UserDTO{" +
-            "login='" +
-            login +
-            '\'' +
-            ", firstName='" +
-            firstName +
-            '\'' +
-            ", lastName='" +
-            lastName +
-            '\'' +
-            ", email='" +
-            email +
-            '\'' +
-            ", imageUrl='" +
-            imageUrl +
-            '\'' +
-            ", activated=" +
-            activated +
-            ", langKey='" +
-            langKey +
-            '\'' +
-            ", createdBy=" +
-            createdBy +
-            ", createdDate=" +
-            createdDate +
-            ", lastModifiedBy='" +
-            lastModifiedBy +
-            '\'' +
-            ", lastModifiedDate=" +
-            lastModifiedDate +
-            ", authorities=" +
-            authorities +
-            "}"
-        );
+        return "UserDTO{" +
+            "login='" + login + '\'' +
+            ", firstName='" + firstName + '\'' +
+            ", lastName='" + lastName + '\'' +
+            ", email='" + email + '\'' +
+            ", imageUrl='" + imageUrl + '\'' +
+            ", activated=" + activated +
+            ", langKey='" + langKey + '\'' +
+            ", createdBy=" + createdBy +
+            ", createdDate=" + createdDate +
+            ", lastModifiedBy='" + lastModifiedBy + '\'' +
+            ", lastModifiedDate=" + lastModifiedDate +
+            ", authorities=" + authorities +
+            "}";
     }
 }

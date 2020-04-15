@@ -1,0 +1,36 @@
+{
+    "name": "IncomingMeta",
+    "fields": [
+        {
+            "fieldName": "receivedAt",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "readAt",
+            "fieldType": "ZonedDateTime"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "letterGroup",
+            "otherEntityRelationshipName": "incomingMeta",
+            "relationshipName": "letterGroup",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200415074700",
+    "entityTableName": "incoming_meta",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "useragent",
+    "applications": [
+        "useragent"
+    ],
+    "microserviceName": "useragent"
+}

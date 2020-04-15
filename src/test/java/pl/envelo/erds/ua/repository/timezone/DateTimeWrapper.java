@@ -1,13 +1,14 @@
 package pl.envelo.erds.ua.repository.timezone;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.time.*;
 import java.util.Objects;
-import javax.persistence.*;
 
 @Entity
 @Table(name = "jhi_date_time_wrapper")
 public class DateTimeWrapper implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -120,19 +121,12 @@ public class DateTimeWrapper implements Serializable {
 
     @Override
     public String toString() {
-        return (
-            "TimeZoneTest{" +
-            "id=" +
-            id +
-            ", instant=" +
-            instant +
-            ", localDateTime=" +
-            localDateTime +
-            ", offsetDateTime=" +
-            offsetDateTime +
-            ", zonedDateTime=" +
-            zonedDateTime +
-            '}'
-        );
+        return "TimeZoneTest{" +
+            "id=" + id +
+            ", instant=" + instant +
+            ", localDateTime=" + localDateTime +
+            ", offsetDateTime=" + offsetDateTime +
+            ", zonedDateTime=" + zonedDateTime +
+            '}';
     }
 }

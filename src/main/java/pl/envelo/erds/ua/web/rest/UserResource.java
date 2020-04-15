@@ -1,9 +1,14 @@
 package pl.envelo.erds.ua.web.rest;
 
+import pl.envelo.erds.ua.config.Constants;
+import pl.envelo.erds.ua.security.AuthoritiesConstants;
+import pl.envelo.erds.ua.service.UserService;
+import pl.envelo.erds.ua.service.dto.UserDTO;
+
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
-import java.util.*;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,10 +20,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import pl.envelo.erds.ua.config.Constants;
-import pl.envelo.erds.ua.security.AuthoritiesConstants;
-import pl.envelo.erds.ua.service.UserService;
-import pl.envelo.erds.ua.service.dto.UserDTO;
+
+import java.util.*;
 
 /**
  * REST controller for managing users.
@@ -47,6 +50,7 @@ import pl.envelo.erds.ua.service.dto.UserDTO;
 @RestController
 @RequestMapping("/api")
 public class UserResource {
+
     private final Logger log = LoggerFactory.getLogger(UserResource.class);
 
     @Value("${jhipster.clientApp.name}")
@@ -90,6 +94,8 @@ public class UserResource {
     @GetMapping("/users/{login:" + Constants.LOGIN_REGEX + "}")
     public ResponseEntity<UserDTO> getUser(@PathVariable String login) {
         log.debug("REST request to get User : {}", login);
-        return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(UserDTO::new));
+        return ResponseUtil.wrapOrNotFound(
+            userService.getUserWithAuthoritiesByLogin(login)
+                .map(UserDTO::new));
     }
 }

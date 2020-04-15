@@ -1,0 +1,55 @@
+{
+    "name": "UserAccount",
+    "fields": [
+        {
+            "fieldName": "ncloakId",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "firstName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lastName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "isActive",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "addressBookItem",
+            "otherEntityRelationshipName": "userAccount",
+            "relationshipName": "addressBook"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "box",
+            "otherEntityRelationshipName": "userAccount",
+            "relationshipName": "box",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20200415075400",
+    "entityTableName": "user_account",
+    "dto": "mapstruct",
+    "pagination": "no",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "useragent",
+    "applications": [
+        "useragent"
+    ],
+    "microserviceName": "useragent"
+}
