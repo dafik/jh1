@@ -1,0 +1,198 @@
+application {
+  config {
+    baseName useragent,
+    applicationType microservice,
+    packageName pl.envelo.erds.ua,
+    prodDatabaseType mssql,
+    devDatabaseType h2Disk,
+    authenticationType oauth2,
+    cacheProvider hazelcast,
+    enableHibernateCache true,
+    buildTool maven,
+    serverPort 5555,
+    skipUserManagement true,
+    skipClient true,
+    skipServer true,
+    useSass true,
+    testFrameworks [protractor]
+  }
+  entities *
+}
+
+entity LetterGroup {
+	msgId String
+    state LetterState
+    subject String
+    createdAt ZonedDateTime
+    replayTo String
+    inReplayTo String
+}
+
+entity Thread {
+    subject String
+    lastLetterTime ZonedDateTime
+}
+
+// Meta
+entity Letter {
+    ean String
+    erdsId String
+}
+
+entity IncomingMeta {
+    receivedAt ZonedDateTime
+    readAt ZonedDateTime
+}
+
+entity OutgoingMeta {
+    sendAt ZonedDateTime
+    expireAt Integer
+    lastEditAt ZonedDateTime
+}
+
+entity Attachment {
+    name String
+    size Integer
+    s3name String
+    contentType String
+}
+
+// Notification and evidence
+entity Notification {
+    ean String
+    erdsId String
+    processId String
+    subject String
+    state NotificationState
+    senderId String
+    senderLabel String
+    sendAt ZonedDateTime
+    decisionAt ZonedDateTime
+    expireAt ZonedDateTime
+}
+
+entity Evidence {
+    ean String
+    erdsId String
+    processId String
+    date ZonedDateTime
+    type EvidenceType
+    location String
+}
+
+// Actor, box, account
+entity Actor {
+   uid String
+   schema String
+   label String
+}
+
+entity Box {
+    uid String
+    namespace String
+    label String
+    boxType BoxType
+    isActive Boolean
+    rulesAcceptanceDate ZonedDateTime
+}
+
+entity UserAccount {
+	ncloakId String
+    email String
+    firstName String
+    lastName String
+    isActive Boolean
+}
+
+entity AddressBookItem {
+   uid String
+   schema String
+   label String
+}
+
+// Relationships
+relationship OneToOne {
+    LetterGroup to IncomingMeta
+    LetterGroup to OutgoingMeta
+}
+
+relationship ManyToOne {
+    Letter {sender}  to Actor
+    Letter {receipient} to Actor
+    Box {rulesAcceptanceUser} to UserAccount
+}
+
+relationship OneToMany {
+    LetterGroup to Attachment
+    LetterGroup to Letter
+    Box to Evidence
+    Box to Notification
+    Box to LetterGroup
+    Thread to LetterGroup
+	UserAccount {addressBook} to AddressBookItem
+}
+
+relationship ManyToMany {
+    UserAccount to Box
+}
+
+// Enums
+enum EvidenceType {
+	A1,
+    A2,
+    B1,
+    B2,
+    B3,
+    C1,
+    C2,
+    C3,
+    C4,
+    C5,
+    D1,
+    D2,
+    D3,
+    D4,
+    E1,
+    E2
+}
+
+enum LetterState {
+	RECEIVED,
+	TRASH_RECEIVED,
+	DRAFT,
+	TRASH_DRAFT,
+	PENDING,
+	TRASH_PENDING,
+	PAID,
+	TRASH_PAID,
+	SENT,
+	TRASH_SENT
+}
+
+enum NotificationState {
+	NEW,
+    ACCEPTED,
+    REJECTED
+}
+
+enum BoxType {
+    NATURAL,
+    LEGAL
+}
+
+service * with serviceImpl
+dto * with mapstruct
+
+paginate LetterGroup with pager
+paginate Notification with pager
+paginate Evidence with pager
+paginate AddressBookItem with pager
+
+filter LetterGroup
+filter Letter
+filter IncomingMeta
+filter OutgoingMeta
+filter Actor
+filter Notification
+filter Evidence
+filter AddressBookItem
