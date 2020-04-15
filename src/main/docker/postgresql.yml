@@ -1,0 +1,11 @@
+version: '2'
+services:
+  useragent-postgresql:
+    image: postgres:12.1
+    # volumes:
+    #     - ~/volumes/jhipster/useragent/postgresql/:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=useragent
+      - POSTGRES_PASSWORD=
+    ports:
+      - 5432:5432
